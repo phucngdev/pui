@@ -1,4 +1,5 @@
 import React from "react";
+import "./style/index.css";
 
 const buttonStyles = {
   primary: {
@@ -35,10 +36,11 @@ const Button = ({
   type = "default",
   icon,
   size = "medium",
+  style,
 }) => {
   const sizeClasses = buttonSizes[size] || buttonSizes.medium;
   const baseClasses =
-    "px-4 py-1 rounded-md font-medium transition-all flex items-center justify-center gap-2";
+    "rounded-md font-medium transition-all flex items-center justify-center gap-2";
   const typeClasses = buttonStyles[type]?.[danger ? "danger" : "default"] || "";
 
   return (
@@ -49,6 +51,7 @@ const Button = ({
       onClick={onClick}
       disabled={disabled || loading}
       aria-busy={loading}
+      style={style}
     >
       {loading ? (
         <span className="animate-spin border-2 border-t-transparent rounded-full w-4 h-4"></span>

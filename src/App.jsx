@@ -1,9 +1,6 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import React from "react";
 import "./App.css";
-import Button from "./components/Button";
+import Button from "./components/button/Button";
 
 function App() {
   const handleClick = () => {
@@ -12,16 +9,13 @@ function App() {
   return (
     <>
       <div className="flex items-center justify-center gap-3 h-screen">
-        <Button type="primary">Primary</Button>
-        <Button>Default</Button>
-        <Button type="primary" danger>
-          Primary danger
+        <Button disabled>Default disabled</Button>
+        <Button disabled type="primary">
+          Primary disabled
         </Button>
-        <Button danger>Default danger</Button>
-        <Button type="dashed" danger>
-          Dashed danger
+        <Button disabled type="dashed">
+          Dashed disabled
         </Button>
-        <Button type="dashed">Dashed</Button>
       </div>
     </>
   );
