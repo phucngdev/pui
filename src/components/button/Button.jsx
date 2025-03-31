@@ -37,10 +37,12 @@ const Button = ({
   icon,
   size = "medium",
   style,
+  iconPosition = "start",
 }) => {
   const sizeClasses = buttonSizes[size] || buttonSizes.medium;
-  const baseClasses =
-    "rounded-md font-medium transition-all flex items-center justify-center gap-2";
+  const baseClasses = `rounded-md font-medium transition-all flex ${
+    iconPosition === "end" ? "flex-row-reverse" : ""
+  } items-center justify-center gap-2`;
   const typeClasses = buttonStyles[type]?.[danger ? "danger" : "default"] || "";
 
   return (
