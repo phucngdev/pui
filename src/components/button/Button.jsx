@@ -1,66 +1,49 @@
 import React from "react";
-import "./style/index.css";
-
-const buttonStyles = {
-  primary: {
-    default:
-      "bg-[#1677ff] hover:bg-[#4096ff] text-white border-[2px] border-[#1677ff]",
-    danger:
-      "bg-[#ff4d4f] hover:bg-[#ff7875] text-white border-[2px] border-[#ff4d4f]",
-  },
-  default: {
-    default: "bg-transparent text-black border-[2px] border-[#d9d9d9]",
-    danger: "bg-transparent text-[#ff4d4f] border-[2px] border-[#ff4d4f]",
-  },
-  dashed: {
-    default:
-      "bg-transparent text-[#1677ff] border-[2px] border-[#1677ff] border-dashed",
-    danger:
-      "bg-transparent text-[#ff4d4f] border-[2px] border-[#ff4d4f] border-dashed",
-  },
-};
-
-const buttonSizes = {
-  small: "py-1 px-2 text-sm",
-  medium: "py-2 px-4 text-base",
-  large: "py-3 px-6 text-lg",
-};
+import "./style/Button.css";
 
 const Button = ({
   children,
-  onClick,
+  type = "default",
+  size = "middle",
+  shape = "default",
   danger = false,
   disabled = false,
   loading = false,
-  className = "",
-  type = "default",
+  block = false,
   icon,
-  size = "medium",
-  style,
-  iconPosition = "start",
+  className = "",
+  onClick,
+  ...props
 }) => {
-  const sizeClasses = buttonSizes[size] || buttonSizes.medium;
-  const baseClasses = `rounded-md font-medium transition-all flex ${
-    iconPosition === "end" ? "flex-row-reverse" : ""
-  } items-center justify-center gap-2`;
-  const typeClasses = buttonStyles[type]?.[danger ? "danger" : "default"] || "";
+  const buttonClassName = `
+    pui-btn
+    pui-btn-${type}
+    pui-btn-${size}
+    ${shape !== "default" ? `pui-btn-${shape}` : ""}
+    ${danger ? "pui-btn-dangerous" : ""}
+    ${disabled ? "pui-btn-disabled" : ""}
+    ${loading ? "pui-btn-loading" : ""}
+    ${block ? "pui-btn-block" : ""}
+    ${className}
+  `.trim();
+
+  const handleClick = (e) => {
+    if (disabled || loading) {
+      return;
+    }
+    onClick?.(e);
+  };
 
   return (
     <button
-      className={`${baseClasses}  ${sizeClasses} ${typeClasses} ${
-        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
-      } ${className}`}
-      onClick={onClick}
+      className={buttonClassName}
       disabled={disabled || loading}
-      aria-busy={loading}
-      style={style}
+      onClick={handleClick}
+      {...props}
     >
-      {loading ? (
-        <span className="animate-spin border-2 border-t-transparent rounded-full w-4 h-4"></span>
-      ) : (
-        icon && <span className="size-6">{icon}</span>
-      )}
-      {children}
+      {loading && <span className="pui-btn-loading-icon">⌛</span>}
+      {icon && !loading && <span className="pui-btn-icon">{icon}</span>}
+      <span className="pui-btn-content">{children}</span>
     </button>
   );
 };

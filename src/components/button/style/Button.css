@@ -1,0 +1,176 @@
+.pui-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+  user-select: none;
+  touch-action: manipulation;
+  line-height: 1.5715;
+  border-radius: 6px;
+  padding: 4px 15px;
+  font-size: 14px;
+}
+
+/* Types */
+.pui-btn-default {
+  color: rgba(0, 0, 0, 0.85);
+  background: #fff;
+  border-color: #d9d9d9;
+}
+
+.pui-btn-default:hover {
+  color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.pui-btn-primary {
+  color: #fff;
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.pui-btn-primary:hover {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.pui-btn-dashed {
+  color: rgba(0, 0, 0, 0.85);
+  background: #fff;
+  border-color: #d9d9d9;
+  border-style: dashed;
+}
+
+.pui-btn-dashed:hover {
+  color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.pui-btn-text {
+  color: rgba(0, 0, 0, 0.85);
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.pui-btn-text:hover {
+  color: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.018);
+}
+
+.pui-btn-link {
+  color: #1890ff;
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.pui-btn-link:hover {
+  color: #40a9ff;
+}
+
+/* Sizes */
+.pui-btn-large {
+  height: 40px;
+  padding: 6.4px 15px;
+  font-size: 16px;
+  border-radius: 8px;
+}
+
+.pui-btn-small {
+  height: 24px;
+  padding: 0 7px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+/* Shapes */
+.pui-btn-circle {
+  min-width: 32px;
+  padding-right: 0;
+  padding-left: 0;
+  text-align: center;
+  border-radius: 50%;
+}
+
+.pui-btn-round {
+  border-radius: 32px;
+}
+
+/* States */
+.pui-btn-dangerous {
+  color: #ff4d4f;
+  background: #fff;
+  border-color: #ff4d4f;
+}
+
+.pui-btn-dangerous:hover {
+  color: #ff7875;
+  border-color: #ff7875;
+}
+
+.pui-btn-dangerous.pui-btn-primary {
+  color: #fff;
+  background: #ff4d4f;
+  border-color: #ff4d4f;
+}
+
+.pui-btn-dangerous.pui-btn-primary:hover {
+  background: #ff7875;
+  border-color: #ff7875;
+}
+
+.pui-btn-disabled {
+  color: rgba(0, 0, 0, 0.25);
+  background: #f5f5f5;
+  border-color: #d9d9d9;
+  cursor: not-allowed;
+}
+
+.pui-btn-disabled:hover {
+  color: rgba(0, 0, 0, 0.25);
+  background: #f5f5f5;
+  border-color: #d9d9d9;
+}
+
+.pui-btn-loading {
+  position: relative;
+  cursor: default;
+}
+
+.pui-btn-loading-icon {
+  margin-right: 8px;
+  animation: pui-btn-loading 1s infinite linear;
+}
+
+.pui-btn-block {
+  width: 100%;
+}
+
+.pui-btn-icon {
+  margin-right: 8px;
+}
+
+@keyframes pui-btn-loading {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pui-btn {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
