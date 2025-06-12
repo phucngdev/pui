@@ -1,3 +1,5 @@
+@import "../../../styles/variables.css";
+
 .pui-btn {
   position: relative;
   display: inline-flex;
@@ -33,7 +35,7 @@
 
 .pui-btn-primary {
   color: #fff;
-  background: #1890ff;
+  background: var(--primary-6);
   border-color: #1890ff;
 }
 
