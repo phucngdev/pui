@@ -1,0 +1,61 @@
+.pui-form {
+  width: 100%;
+}
+
+.pui-form-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pui-form-horizontal {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.pui-form-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pui-form-item-horizontal {
+  flex-direction: row;
+  align-items: center;
+}
+
+.pui-form-item-label {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.85);
+  line-height: 1.5715;
+}
+
+.pui-form-item-required {
+  color: #ff4d4f;
+  margin-left: 4px;
+}
+
+.pui-form-item-control {
+  position: relative;
+}
+
+.pui-form-item-error input {
+  border-color: #ff4d4f;
+}
+
+.pui-form-item-error-message {
+  color: #ff4d4f;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.pui-form-item-horizontal .pui-form-item-label {
+  flex: 0 0 200px;
+  text-align: right;
+  padding-right: 8px;
+}
+
+.pui-form-item-horizontal .pui-form-item-control {
+  flex: 1;
+}
