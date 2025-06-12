@@ -1,0 +1,97 @@
+.message-container {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.message {
+  padding: 8px 16px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  pointer-events: all;
+  animation: messageSlideIn 0.3s ease-in-out;
+}
+
+.message-content {
+  display: flex;
+  align-items: center;
+}
+
+.message-icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.message-text {
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  line-height: 1.5715;
+}
+
+.message-close {
+  margin-left: 8px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.45);
+  transition: color 0.3s;
+}
+
+.message-close:hover {
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.message-info {
+  border: 1px solid #91caff;
+  background: #e6f7ff;
+}
+
+.message-success {
+  border: 1px solid #b7eb8f;
+  background: #f6ffed;
+}
+
+.message-warning {
+  border: 1px solid #ffe58f;
+  background: #fffbe6;
+}
+
+.message-error {
+  border: 1px solid #ffccc7;
+  background: #fff2f0;
+}
+
+@keyframes messageSlideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes messageSlideOut {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}

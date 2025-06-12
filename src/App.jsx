@@ -1,5 +1,6 @@
 import React from "react";
 import Input from "./components/input/index";
+import message from "./components/message";
 import {
   UserIcon,
   EmailIcon,
@@ -37,9 +38,29 @@ function App() {
     { name: "EyeInvisibleIcon", component: EyeInvisibleIcon },
   ];
 
+  const showMessage = (type) => {
+    switch (type) {
+      case "info":
+        message.info("Đây là thông báo thông tin");
+        break;
+      case "success":
+        message.success("Thao tác đã được thực hiện thành công!");
+        break;
+      case "warning":
+        message.warning("Cảnh báo! Vui lòng kiểm tra lại thông tin.");
+        break;
+      case "error":
+        message.error("Đã xảy ra lỗi! Vui lòng thử lại sau.");
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div className="container mx-auto p-8">
       <Input prefix={<SearchIcon color="#000" />} placeholder="Placeholder" />
+
       <h1 className="text-2xl font-bold mb-6">Icon Showcase</h1>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
@@ -54,6 +75,36 @@ function App() {
             <span className="text-sm text-gray-600">{icon.name}</span>
           </div>
         ))}
+      </div>
+
+      <div className="mt-12">
+        <h2 className="text-xl font-bold mb-4">Message Demo</h2>
+        <div className="flex gap-4">
+          <button
+            onClick={() => showMessage("info")}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Info Message
+          </button>
+          <button
+            onClick={() => showMessage("success")}
+            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            Success Message
+          </button>
+          <button
+            onClick={() => showMessage("warning")}
+            className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+          >
+            Warning Message
+          </button>
+          <button
+            onClick={() => showMessage("error")}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+          >
+            Error Message
+          </button>
+        </div>
       </div>
 
       <div className="mt-12">
