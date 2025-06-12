@@ -1,140 +1,188 @@
 # Form Component
 
-Một component Form linh hoạt và có thể tùy chỉnh, được lấy cảm hứng từ Form component của Ant Design.
-
-## Cài đặt
-
-```bash
-npm install @your-package/form
-```
-
-## Cách sử dụng cơ bản
+## Cách sử dụng
 
 ```jsx
-import { Form } from "@your-package/form";
+import { Form } from "@pui/form";
 
-function MyForm() {
+const MyForm = () => {
   const [form] = Form.useForm();
 
-  const handleFinish = (values) => {
-    console.log("Giá trị form:", values);
+  const onFinish = (values) => {
+    console.log("Form values:", values);
   };
 
   return (
-    <Form form={form} onFinish={handleFinish}>
+    <Form form={form} onFinish={onFinish} layout="vertical">
       <Form.Item
+        label="Username"
         name="username"
-        label="Tên đăng nhập"
-        rules={{
-          required: true,
-          message: "Vui lòng nhập tên đăng nhập",
-        }}
+        rules={[
+          { required: true, message: "Please input your username!" },
+          { min: 3, message: "Username must be at least 3 characters!" },
+        ]}
       >
-        <input type="text" />
+        <Input />
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
       </Form.Item>
     </Form>
   );
-}
+};
 ```
 
-## Tính năng
+## API
 
-### Props của Form
+### Form
 
-| Prop          | Type                       | Mặc định   | Mô tả                                     |
-| ------------- | -------------------------- | ---------- | ----------------------------------------- |
-| form          | FormInstance               | -          | Instance form được tạo bởi Form.useForm() |
-| layout        | 'horizontal' \| 'vertical' | 'vertical' | Bố cục của form                           |
-| onFinish      | (values) => void           | -          | Callback khi form được submit             |
-| initialValues | object                     | {}         | Giá trị ban đầu của các trường            |
-| className     | string                     | ''         | Class CSS bổ sung                         |
+| Property       | Type                       | Default      | Description                                       |
+| -------------- | -------------------------- | ------------ | ------------------------------------------------- |
+| form           | FormInstance               | -            | Form instance được tạo bởi Form.useForm()         |
+| layout         | 'horizontal' \| 'vertical' | 'horizontal' | Layout của form                                   |
+| onFinish       | (values) => void           | -            | Callback được gọi khi form được submit thành công |
+| onFinishFailed | (errorInfo) => void        | -            | Callback được gọi khi form submit thất bại        |
+| className      | string                     | -            | Custom CSS class                                  |
+| style          | CSSProperties              | -            | Custom CSS styles                                 |
 
-### Props của Form.Item
+### Form.Item
 
-| Prop      | Type      | Mặc định | Mô tả              |
-| --------- | --------- | -------- | ------------------ |
-| name      | string    | -        | Tên trường         |
-| label     | ReactNode | -        | Nhãn của form item |
-| rules     | object[]  | -        | Quy tắc validation |
-| className | string    | ''       | Class CSS bổ sung  |
+| Property        | Type               | Default    | Description                |
+| --------------- | ------------------ | ---------- | -------------------------- |
+| label           | ReactNode          | -          | Label của form item        |
+| name            | string             | -          | Tên field trong form data  |
+| rules           | Rule[]             | -          | Validation rules           |
+| required        | boolean            | false      | Field có bắt buộc không    |
+| validateTrigger | string \| string[] | 'onChange' | Khi nào trigger validation |
+| valuePropName   | string             | 'value'    | Prop name của field value  |
+| noStyle         | boolean            | false      | Ẩn label và wrapper        |
+| className       | string             | -          | Custom CSS class           |
+| style           | CSSProperties      | -          | Custom CSS styles          |
 
-### Quy tắc Validation
+### Rule
 
-```jsx
-rules={{
-  required: true,
-  message: "Trường này là bắt buộc",
-  min: 3,
-  minMessage: "Độ dài tối thiểu là 3 ký tự",
-  max: 20,
-  maxMessage: "Độ dài tối đa là 20 ký tự",
-  pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-  validator: (value) => {
-    if (!/[A-Z]/.test(value)) {
-      return "Phải chứa ít nhất một chữ hoa";
-    }
-    return true;
-  }
-}}
-```
+| Property  | Type                                                  | Default  | Description             |
+| --------- | ----------------------------------------------------- | -------- | ----------------------- |
+| required  | boolean                                               | false    | Field có bắt buộc không |
+| message   | string                                                | -        | Error message           |
+| min       | number                                                | -        | Độ dài tối thiểu        |
+| max       | number                                                | -        | Độ dài tối đa           |
+| type      | 'string' \| 'number' \| 'boolean' \| 'email' \| 'url' | 'string' | Kiểu dữ liệu            |
+| pattern   | RegExp                                                | -        | Regex pattern           |
+| validator | (rule, value) => Promise                              | -        | Custom validator        |
 
-### Các phương thức của Form Instance
+### FormInstance
 
-```jsx
-const [form] = Form.useForm();
-
-// Đặt giá trị cho một trường
-form.setFieldValue("username", "john");
-
-// Đặt giá trị cho nhiều trường
-form.setFieldsValue({
-  username: "john",
-  email: "john@example.com",
-});
-
-// Lấy giá trị của một trường
-const username = form.getFieldValue("username");
-
-// Lấy giá trị của tất cả các trường
-const values = form.getFieldsValue();
-
-// Reset form về giá trị ban đầu
-form.resetFields();
-
-// Xóa tất cả giá trị của form
-form.clearFields();
-
-// Validate tất cả các trường
-form.validateFields();
-
-// Submit form
-form.submit();
-```
+| Method         | Type                                  | Description                   |
+| -------------- | ------------------------------------- | ----------------------------- |
+| getFieldValue  | (name: string) => any                 | Lấy giá trị của field         |
+| getFieldsValue | () => Record<string, any>             | Lấy tất cả giá trị của form   |
+| setFieldValue  | (name: string, value: any) => void    | Set giá trị cho field         |
+| setFieldsValue | (values: Record<string, any>) => void | Set nhiều giá trị cho form    |
+| resetFields    | () => void                            | Reset form về giá trị ban đầu |
+| validateFields | () => Promise                         | Validate form                 |
+| submit         | () => void                            | Submit form                   |
 
 ## Ví dụ
 
-Xem thêm các ví dụ trong thư mục demo:
+### Form với validation
 
-- Form cơ bản
-- Form với Validation
-- Form với Validation tùy chỉnh
-- Form với các trường động
-- Form với các tùy chọn bố cục
+```jsx
+<Form form={form} onFinish={onFinish} onFinishFailed={onFinishFailed}>
+  <Form.Item
+    label="Username"
+    name="username"
+    rules={[
+      { required: true, message: "Please input your username!" },
+      { min: 3, message: "Username must be at least 3 characters!" },
+    ]}
+  >
+    <Input />
+  </Form.Item>
 
-## Tùy chỉnh giao diện
-
-Component sử dụng các class CSS để tùy chỉnh giao diện. Bạn có thể ghi đè các class sau:
-
-```css
-.pui-form
-  .pui-form-vertical
-  .pui-form-horizontal
-  .pui-form-item
-  .pui-form-item-label
-  .pui-form-item-required
-  .pui-form-item-control
-  .pui-form-item-error
-  .pui-form-item-error-message;
+  <Form.Item
+    label="Password"
+    name="password"
+    rules={[
+      { required: true, message: "Please input your password!" },
+      { min: 6, message: "Password must be at least 6 characters!" },
+    ]}
+  >
+    <Input.Password />
+  </Form.Item>
+</Form>
 ```
 
-Mọi đóng góp đều được hoan nghênh! Hãy thoải mái tạo Pull Request.
+### Form với custom validator
+
+```jsx
+<Form.Item
+  label="Age"
+  name="age"
+  rules={[
+    { required: true, message: "Please input your age!" },
+    {
+      validator: async (_, value) => {
+        if (value < 18) {
+          throw new Error("You must be at least 18 years old!");
+        }
+      },
+    },
+  ]}
+>
+  <Input type="number" />
+</Form.Item>
+```
+
+### Form với dynamic fields
+
+```jsx
+<Form.List name="items">
+  {(fields, { add, remove }) => (
+    <>
+      {fields.map(({ key, name, ...restField }) => (
+        <Form.Item
+          key={key}
+          {...restField}
+          name={[name, "value"]}
+          rules={[{ required: true, message: "Missing value" }]}
+        >
+          <Input />
+        </Form.Item>
+      ))}
+      <Form.Item>
+        <Button type="dashed" onClick={() => add()}>
+          Add field
+        </Button>
+      </Form.Item>
+    </>
+  )}
+</Form.List>
+```
+
+## Styling
+
+Form component sử dụng CSS modules và có thể được tùy chỉnh thông qua các props `className` và `style`. Các class mặc định:
+
+- `.form`: Container của form
+- `.form-item`: Container của form item
+- `.form-item-label`: Label của form item
+- `.form-item-control`: Container của form control
+- `.form-item-error`: Error message của form item
+
+## Best Practices
+
+1. Sử dụng `Form.useForm()` để tạo form instance và quản lý form state
+2. Đặt validation rules phù hợp với yêu cầu của field
+3. Sử dụng `onFinish` để xử lý dữ liệu form khi submit thành công
+4. Sử dụng `onFinishFailed` để xử lý lỗi validation
+5. Sử dụng `layout="vertical"` cho form có nhiều fields
+6. Sử dụng `noStyle` cho form items không cần label
+7. Sử dụng `valuePropName` cho các components không sử dụng prop `value` mặc định
+
+## Contributing
+
+Mọi đóng góp đều được hoan nghênh! Vui lòng đọc [CONTRIBUTING.md](CONTRIBUTING.md) để biết thêm chi tiết.

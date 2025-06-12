@@ -3,7 +3,7 @@
 ## Cách sử dụng cơ bản
 
 ```jsx
-import { Input } from "@your-package/input";
+import { Input } from "@pui/input";
 
 function MyComponent() {
   const handleChange = (e) => {

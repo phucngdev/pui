@@ -1,17 +1,9 @@
 # Button Component
 
-Button là một component cơ bản để tạo các nút bấm với nhiều kiểu dáng và trạng thái khác nhau.
-
-## Cài đặt
-
-```bash
-npm install @your-package/button
-```
-
 ## Cách sử dụng
 
 ```jsx
-import Button from '@your-package/button';
+import Button from '@pui/button';
 
 // Button cơ bản
 <Button>Default Button</Button>
