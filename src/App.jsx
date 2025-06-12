@@ -1,158 +1,104 @@
 import React from "react";
+import Form from "./components/form/Form";
 import Input from "./components/input/index";
+import Button from "./components/button";
 import message from "./components/message";
-import {
-  UserIcon,
-  EmailIcon,
-  LockIcon,
-  SearchIcon,
-  EditIcon,
-  DeleteIcon,
-  LoadingIcon,
-  CheckIcon,
-  CloseIcon,
-  InfoIcon,
-  WarningIcon,
-  ErrorIcon,
-  SuccessIcon,
-  EyeIcon,
-  EyeInvisibleIcon,
-} from "./icons/index";
+import { UserIcon, LockIcon, EyeIcon, EyeInvisibleIcon } from "./icons/index";
 
 function App() {
-  const icons = [
-    { name: "UserIcon", component: UserIcon },
-    { name: "EmailIcon", component: EmailIcon },
-    { name: "LockIcon", component: LockIcon },
-    { name: "SearchIcon", component: SearchIcon },
-    { name: "EditIcon", component: EditIcon },
-    { name: "DeleteIcon", component: DeleteIcon },
-    { name: "LoadingIcon", component: LoadingIcon },
-    { name: "CheckIcon", component: CheckIcon },
-    { name: "CloseIcon", component: CloseIcon },
-    { name: "InfoIcon", component: InfoIcon },
-    { name: "WarningIcon", component: WarningIcon },
-    { name: "ErrorIcon", component: ErrorIcon },
-    { name: "SuccessIcon", component: SuccessIcon },
-    { name: "EyeIcon", component: EyeIcon },
-    { name: "EyeInvisibleIcon", component: EyeInvisibleIcon },
-  ];
+  const [form] = Form.useForm();
 
-  const showMessage = (type) => {
-    switch (type) {
-      case "info":
-        message.info("Đây là thông báo thông tin");
-        break;
-      case "success":
-        message.success("Thao tác đã được thực hiện thành công!");
-        break;
-      case "warning":
-        message.warning("Cảnh báo! Vui lòng kiểm tra lại thông tin.");
-        break;
-      case "error":
-        message.error("Đã xảy ra lỗi! Vui lòng thử lại sau.");
-        break;
-      default:
-        break;
-    }
+  const handleSubmit = (values) => {
+    // Simulate login
+    message.loading("Đang đăng nhập...");
+    setTimeout(() => {
+      message.success("Đăng nhập thành công!");
+      console.log("Form values:", values);
+    }, 1500);
   };
 
   return (
-    <div className="container mx-auto p-8">
-      <Input prefix={<SearchIcon color="#000" />} placeholder="Placeholder" />
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h1 className="text-2xl font-bold text-center mb-8">Đăng nhập</h1>
 
-      <h1 className="text-2xl font-bold mb-6">Icon Showcase</h1>
+        <Form
+          form={form}
+          onFinish={handleSubmit}
+          layout="vertical"
+          className="space-y-6"
+        >
+          <Form.Item
+            label="Tên đăng nhập"
+            name="username"
+            rules={[
+              { required: true, message: "Vui lòng nhập tên đăng nhập!" },
+              { min: 3, message: "Tên đăng nhập phải có ít nhất 3 ký tự!" },
+            ]}
+          >
+            <Input
+              prefix={<UserIcon size={16} />}
+              placeholder="Nhập tên đăng nhập"
+            />
+          </Form.Item>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-        {icons.map((icon) => (
-          <div
-            key={icon.name}
-            className="flex flex-col items-center p-4 border rounded-lg hover:shadow-md transition-shadow"
+          <Form.Item
+            label="Mật khẩu"
+            name="password"
+            rules={[
+              { required: true, message: "Vui lòng nhập mật khẩu!" },
+              { min: 6, message: "Mật khẩu phải có ít nhất 6 ký tự!" },
+            ]}
           >
-            <div className="mb-2">
-              <icon.component size={24} />
-            </div>
-            <span className="text-sm text-gray-600">{icon.name}</span>
-          </div>
-        ))}
-      </div>
+            <Input.Password
+              prefix={<LockIcon size={16} />}
+              placeholder="Nhập mật khẩu"
+              iconRender={(visible) =>
+                visible ? <EyeIcon size={16} /> : <EyeInvisibleIcon size={16} />
+              }
+            />
+          </Form.Item>
 
-      <div className="mt-12">
-        <h2 className="text-xl font-bold mb-4">Message Demo</h2>
-        <div className="flex gap-4">
-          <button
-            onClick={() => showMessage("info")}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          >
-            Info Message
-          </button>
-          <button
-            onClick={() => showMessage("success")}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-          >
-            Success Message
-          </button>
-          <button
-            onClick={() => showMessage("warning")}
-            className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-          >
-            Warning Message
-          </button>
-          <button
-            onClick={() => showMessage("error")}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-          >
-            Error Message
-          </button>
-        </div>
-      </div>
+          <div className="flex items-center justify-between">
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <label
+                  htmlFor="remember"
+                  className="ml-2 block text-sm text-gray-700"
+                >
+                  Ghi nhớ đăng nhập
+                </label>
+              </div>
+            </Form.Item>
+            <a
+              href="#"
+              className="text-sm font-medium text-blue-600 hover:text-blue-500"
+            >
+              Quên mật khẩu?
+            </a>
+          </div>
 
-      <div className="mt-12">
-        <h2 className="text-xl font-bold mb-4">Icon Sizes</h2>
-        <div className="flex items-center gap-8">
-          <div className="flex flex-col items-center">
-            <SearchIcon size={16} />
-            <span className="text-sm mt-2">16px</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <SearchIcon size={24} />
-            <span className="text-sm mt-2">24px</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <SearchIcon size={32} />
-            <span className="text-sm mt-2">32px</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <SearchIcon size={48} />
-            <span className="text-sm mt-2">48px</span>
-          </div>
-        </div>
-      </div>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Đăng nhập
+            </Button>
+          </Form.Item>
 
-      <div className="mt-12">
-        <h2 className="text-xl font-bold mb-4">Icon Colors</h2>
-        <div className="flex items-center gap-8">
-          <div className="flex flex-col items-center">
-            <SearchIcon color="#1890ff" />
-            <span className="text-sm mt-2">Primary</span>
+          <div className="text-center">
+            <span className="text-sm text-gray-600">Chưa có tài khoản? </span>
+            <a
+              href="#"
+              className="text-sm font-medium text-blue-600 hover:text-blue-500"
+            >
+              Đăng ký ngay
+            </a>
           </div>
-          <div className="flex flex-col items-center">
-            <SearchIcon color="#52c41a" />
-            <span className="text-sm mt-2">Success</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <SearchIcon color="#faad14" />
-            <span className="text-sm mt-2">Warning</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <SearchIcon color="#ff4d4f" />
-            <span className="text-sm mt-2">Error</span>
-          </div>
-          <div className="flex flex-col items-center">
-            <SearchIcon color="#000000" />
-            <span className="text-sm mt-2">Black</span>
-          </div>
-        </div>
+        </Form>
       </div>
     </div>
   );

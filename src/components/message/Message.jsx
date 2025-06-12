@@ -6,6 +6,7 @@ import {
   WarningIcon,
   ErrorIcon,
   CloseIcon,
+  LoadingIcon,
 } from "../../icons";
 import "./Message.css";
 
@@ -31,6 +32,8 @@ const Message = ({ content, type = "info", duration = 3, onClose }) => {
         return <WarningIcon color="#faad14" />;
       case "error":
         return <ErrorIcon color="#ff4d4f" />;
+      case "loading":
+        return <LoadingIcon color="#1890ff" />;
       default:
         return <InfoIcon color="#1890ff" />;
     }
@@ -44,9 +47,11 @@ const Message = ({ content, type = "info", duration = 3, onClose }) => {
         <span className="message-icon">{getIcon()}</span>
         <span className="message-text">{content}</span>
       </div>
-      <button className="message-close" onClick={() => setVisible(false)}>
-        <CloseIcon size={14} />
-      </button>
+      {type !== "loading" && (
+        <button className="message-close" onClick={() => setVisible(false)}>
+          <CloseIcon size={14} />
+        </button>
+      )}
     </div>
   );
 };
@@ -82,6 +87,9 @@ const message = {
   },
   error: (content, duration) => {
     messageContainer.show({ content, type: "error", duration });
+  },
+  loading: (content, duration) => {
+    messageContainer.show({ content, type: "loading", duration });
   },
 };
 
