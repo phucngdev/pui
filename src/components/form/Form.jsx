@@ -1,241 +1,107 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useRef,
-  useEffect,
-} from "react";
-import "./style/Form.css";
+import React, { createContext, useContext, useState } from "react";
+import "./Form.css";
 
 const FormContext = createContext();
 
-const Form = ({
-  children,
-  layout = "vertical",
-  onFinish,
-  initialValues = {},
-  className = "",
-  form,
-  ...props
-}) => {
-  const [formData, setFormData] = useState(initialValues);
+const Form = ({ children, form, onFinish, layout = "horizontal" }) => {
+  const [formData, setFormData] = useState({});
   const [errors, setErrors] = useState({});
-  const formItemsRef = useRef(new Map());
 
   const validateField = (name, value, rules) => {
     if (!rules) return true;
 
-    let isValid = true;
-    let errorMessage = "";
-
-    if (rules.required && !value) {
-      isValid = false;
-      errorMessage = rules.message || "This field is required";
-    }
-
-    if (rules.pattern && value && !rules.pattern.test(value)) {
-      isValid = false;
-      errorMessage = rules.message || "Invalid format";
-    }
-
-    if (rules.min && value && value.length < rules.min) {
-      isValid = false;
-      errorMessage =
-        rules.minMessage ||
-        rules.message ||
-        `Minimum length is ${rules.min} characters`;
-    }
-
-    if (rules.max && value && value.length > rules.max) {
-      isValid = false;
-      errorMessage =
-        rules.maxMessage ||
-        rules.message ||
-        `Maximum length is ${rules.max} characters`;
-    }
-
-    if (rules.validator && value) {
-      const result = rules.validator(value);
-      if (typeof result === "string") {
-        isValid = false;
-        errorMessage = result;
-      } else if (result === false) {
-        isValid = false;
-        errorMessage = rules.message || "Invalid value";
+    for (const rule of rules) {
+      if (rule.required && !value) {
+        return rule.message || "Trường này là bắt buộc";
+      }
+      if (rule.min && value.length < rule.min) {
+        return rule.message || `Tối thiểu ${rule.min} ký tự`;
+      }
+      if (rule.max && value.length > rule.max) {
+        return rule.message || `Tối đa ${rule.max} ký tự`;
+      }
+      if (rule.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        return rule.message || "Email không hợp lệ";
       }
     }
-
-    setErrors((prev) => ({
-      ...prev,
-      [name]: isValid ? "" : errorMessage,
-    }));
-
-    return isValid;
-  };
-
-  const validateAllFields = () => {
-    const newErrors = {};
-    let isValid = true;
-
-    formItemsRef.current.forEach(({ name, rules }, key) => {
-      const value = formData[name];
-      const fieldValid = validateField(name, value, rules);
-      if (!fieldValid) {
-        isValid = false;
-      }
-    });
-
-    return isValid;
+    return true;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const isValid = validateAllFields();
+    const newErrors = {};
+    let isValid = true;
+
+    React.Children.forEach(children, (child) => {
+      if (child.type === FormItem) {
+        const { name, rules } = child.props;
+        const value = formData[name];
+        const error = validateField(name, value, rules);
+        if (error !== true) {
+          newErrors[name] = error;
+          isValid = false;
+        }
+      }
+    });
+
+    setErrors(newErrors);
+
     if (isValid) {
       onFinish?.(formData);
     }
   };
 
-  const registerField = (name, rules) => {
-    formItemsRef.current.set(name, { name, rules });
-  };
-
-  const setFieldValue = (name, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    const field = formItemsRef.current.get(name);
-    if (field) {
-      validateField(name, value, field.rules);
-    }
-  };
-
-  const setFieldsValue = (values) => {
-    setFormData((prev) => ({
-      ...prev,
-      ...values,
-    }));
-    Object.entries(values).forEach(([name, value]) => {
-      const field = formItemsRef.current.get(name);
-      if (field) {
-        validateField(name, value, field.rules);
-      }
-    });
-  };
-
-  const getFieldValue = (name) => {
-    return formData[name];
-  };
-
-  const getFieldsValue = () => {
-    return { ...formData };
-  };
-
-  const resetFields = () => {
-    setFormData(initialValues);
-    setErrors({});
-  };
-
-  const clearFields = () => {
-    setFormData({});
-    setErrors({});
-  };
-
-  const formInstance = {
-    setFieldValue,
-    setFieldsValue,
-    getFieldValue,
-    getFieldsValue,
-    resetFields,
-    clearFields,
-    validateFields: validateAllFields,
-    submit: handleSubmit,
-  };
-
-  if (form) {
-    Object.assign(form, formInstance);
-  }
-
   const contextValue = {
     formData,
     setFormData,
     errors,
+    setErrors,
     validateField,
     layout,
-    registerField,
-    ...formInstance,
   };
 
   return (
     <FormContext.Provider value={contextValue}>
-      <form
-        onSubmit={handleSubmit}
-        className={`pui-form pui-form-${layout} ${className}`}
-        {...props}
-      >
+      <form onSubmit={handleSubmit} className={`pui-form pui-form-${layout}`}>
         {children}
       </form>
     </FormContext.Provider>
   );
 };
 
-const useForm = () => {
-  const [form] = useState(() => ({}));
-  return [form];
-};
+const FormItem = ({ children, label, name, rules }) => {
+  const { formData, setFormData, errors, validateField, layout } =
+    useContext(FormContext);
 
-const FormItem = ({
-  name,
-  label,
-  rules,
-  children,
-  className = "",
-  ...props
-}) => {
-  const {
-    formData,
-    setFormData,
-    errors,
-    validateField,
-    layout,
-    registerField,
-  } = useContext(FormContext);
-
-  useEffect(() => {
-    if (name && rules) {
-      registerField(name, rules);
-    }
-  }, [name, rules]);
+  const isRequired = rules?.some((rule) => rule.required);
 
   const handleChange = (e) => {
     const value = e.target.value;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-    validateField(name, value, rules);
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    const error = validateField(name, value, rules);
+    if (error === true) {
+      errors[name] = undefined;
+    }
   };
 
-  const childProps = {
+  const child = React.cloneElement(children, {
     value: formData[name] || "",
     onChange: handleChange,
-    className: errors[name] ? "pui-form-item-error" : "",
-    ...props,
-  };
+    className: errors[name] ? "pui-input-error" : "",
+  });
 
   return (
-    <div className={`pui-form-item pui-form-item-${layout} ${className}`}>
+    <div className={`pui-form-item pui-form-item-${layout}`}>
       {label && (
         <label className="pui-form-item-label">
           {label}
-          {rules?.required && <span className="pui-form-item-required">*</span>}
+          {isRequired && <span className="pui-form-item-required">*</span>}
         </label>
       )}
       <div className="pui-form-item-control">
-        {React.cloneElement(children, childProps)}
+        {child}
         {errors[name] && (
-          <div className="pui-form-item-error-message">{errors[name]}</div>
+          <div className="pui-form-item-error">{errors[name]}</div>
         )}
       </div>
     </div>
@@ -243,6 +109,10 @@ const FormItem = ({
 };
 
 Form.Item = FormItem;
-Form.useForm = useForm;
+
+Form.useForm = () => {
+  const [form] = useState({});
+  return [form];
+};
 
 export default Form;
