@@ -9,6 +9,9 @@ message.info("Đây là thông báo thông tin");
 // Hiển thị message thành công
 message.success("Thao tác đã được thực hiện thành công!");
 
+// Hiển thị message loading
+message.loading("Thao tác đang được thực hiện!");
+
 // Hiển thị message cảnh báo
 message.warning("Cảnh báo! Vui lòng kiểm tra lại thông tin.");
 
@@ -19,6 +22,8 @@ message.error("Đã xảy ra lỗi! Vui lòng thử lại sau.");
 ## API
 
 ### message.info(content, duration)
+
+### message.loading(content, duration)
 
 ### message.success(content, duration)
 
